@@ -5,16 +5,21 @@ let ready = false
 let imagesLoaded = 0
 let totalImages = 0
 let photosArray = []
+let initialLoad = true
 
-const count = 30
+
+let count = 5
 const apiKey = 'c8vWkhga5kR20inGZEJef3AzRM2TveWQA4Q7_wVDtn0'
-const url = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&count=${count}`
+let url = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&count=${count}`
 
 const imageLoaded = () => {
     imagesLoaded++ 
     if(imagesLoaded === totalImages) {
         ready = true
         loader.hidden = true
+        initialLoad = false
+        count = 30
+        url = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&count=${count}`
     }
 }
 
