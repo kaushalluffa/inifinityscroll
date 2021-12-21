@@ -1,12 +1,22 @@
 const imgContainer = document.getElementById('image-container')
 const loader = document.getElementById('loader')
 
-
+let ready = false
+let imagesLoaded = 0
+let totalImages = 0
 let photosArray = []
 
-const count = 10
-const apiKey = 'tVP3dNlgOoyp4aP7b2yFfcJ5BXB-JH_Sdq5NvcQW_Xs'
+const count = 30
+const apiKey = 'c8vWkhga5kR20inGZEJef3AzRM2TveWQA4Q7_wVDtn0'
 const url = `https://api.unsplash.com/photos/random/?client_id=${apiKey}&count=${count}`
+
+const imageLoaded = () => {
+    imagesLoaded++ 
+    if(imagesLoaded === totalImages) {
+        ready = true
+        loader.hidden = true
+    }
+}
 
 const setAttribute = (element, attributes) => {
     for (const key in attributes) {
@@ -15,6 +25,8 @@ const setAttribute = (element, attributes) => {
 }
 
 const displayPhotos =  ()=>  {
+    imagesLoaded = 0
+    totalImages = photosArray.length
     photosArray.forEach((photo) => {
         const item = document.createElement('a')
 
@@ -29,6 +41,7 @@ const displayPhotos =  ()=>  {
             alt: photo.alt_description,
             title: photo.alt_description
         })
+        image.addEventListener('load', imageLoaded)
 
         item.appendChild(image)
         imgContainer.appendChild(item)
@@ -47,7 +60,8 @@ const getPhotos = async () => {
 }
 
 window.addEventListener('scroll', () =>{
-    if((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 1000)){
+    if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000 && ready){
+        ready = false
         getPhotos()
     }
 })
